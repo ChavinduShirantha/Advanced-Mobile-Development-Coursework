@@ -12,6 +12,7 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
+
 const logo = require('../../assets/img/tulip_logo.png');
 const bg = require('../../assets/img/main_bg.jpg');
 
@@ -24,20 +25,29 @@ const facebook = require('../../assets/img/facebook.png');
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-export const SignIn = ({navigation}) => {
-  const [click, setClick] = useState(false);
+export const SignUp = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={bg} resizeMode="cover" style={styles.bg}>
         <Image source={logo} style={styles.image} resizeMode="contain" />
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>Sign Up</Text>
         <View style={styles.inputView}>
           <TextInput
             style={styles.input}
-            placeholder="EMAIL OR USERNAME"
+            placeholder="Email"
+            secureTextEntry
+            value={email}
+            onChangeText={setEmail}
+            autoCorrect={false}
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="USERNAME"
             value={username}
             onChangeText={setUsername}
             autoCorrect={false}
@@ -53,29 +63,14 @@ export const SignIn = ({navigation}) => {
             autoCapitalize="none"
           />
         </View>
-        <View style={styles.rememberView}>
-          <View style={styles.switch}>
-            <Switch
-              value={click}
-              onValueChange={setClick}
-              trackColor={{true: 'green', false: 'gray'}}
-            />
-            <Text style={styles.rememberText}>Remember Me</Text>
-          </View>
-          <View>
-            <Pressable onPress={() => Alert.alert('Forget Password!')}>
-              <Text style={styles.forgetText}>Forgot Password?</Text>
-            </Pressable>
-          </View>
-        </View>
 
         <View style={styles.buttonView}>
           <Pressable
             style={styles.button}
             onPress={() => Alert.alert('Login Successfully!')}>
-            <Text style={styles.buttonText}>LOGIN</Text>
+            <Text style={styles.buttonText}>Sign Up</Text>
           </Pressable>
-          <Text style={styles.optionsText}>OR LOGIN WITH</Text>
+          <Text style={styles.optionsText}>OR Sign Up WITH</Text>
         </View>
 
         <View style={styles.mediaIcons}>
@@ -87,9 +82,9 @@ export const SignIn = ({navigation}) => {
         </View>
 
         <Text style={styles.footerText}>
-          Don't Have Account?
-          <Pressable onPress={() => navigation.navigate('SignUp')}>
-            <Text style={styles.signup}>Sign Up</Text>
+          Do Have Account?
+          <Pressable onPress={() => navigation.navigate('SignIn')}>
+            <Text style={styles.signIn}>Sign In</Text>
           </Pressable>
         </Text>
       </ImageBackground>
@@ -133,28 +128,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 7,
   },
-  rememberView: {
-    width: '100%',
-    paddingHorizontal: 50,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginBottom: 8,
-  },
-  switch: {
-    flexDirection: 'row',
-    gap: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  rememberText: {
-    fontSize: 13,
-    color: 'gray',
-  },
-  forgetText: {
-    fontSize: 11,
-    color: 'gray',
-  },
   button: {
     backgroundColor: '#0af',
     height: 45,
@@ -163,6 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 20,
   },
   buttonText: {
     color: 'white',
@@ -195,7 +169,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'gray',
   },
-  signup: {
+  signIn: {
     marginLeft: 10,
     color: '#0af',
     fontSize: 14,
