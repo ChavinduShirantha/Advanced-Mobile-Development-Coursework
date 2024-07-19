@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-// import {SafeAreaView, ScrollView} from 'react-native';
 import {SignIn} from './src/components/SignIn/SignIn';
 import {SignUp} from './src/components/SignUp/SignUp';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -24,12 +23,6 @@ function App(): React.JSX.Element {
         <Stack.Screen name="SignUp" component={SignUp} />
       </Stack.Navigator>
     </NavigationContainer>
-    /*<SafeAreaView>
-      <ScrollView>
-        <SignIn />
-        <SignUp />
-      </ScrollView>
-    </SafeAreaView>*/
   );
 }
 
