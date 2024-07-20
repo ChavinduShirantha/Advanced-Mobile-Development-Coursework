@@ -72,7 +72,7 @@ export const SignIn = ({navigation}) => {
         <View style={styles.buttonView}>
           <Pressable
             style={styles.button}
-            onPress={() => Alert.alert('Login Successfully!')}>
+            onPress={() => navigation.navigate('HomeNavigation')}>
             <Text style={styles.buttonText}>LOGIN</Text>
           </Pressable>
           <Text style={styles.optionsText}>OR LOGIN WITH</Text>
