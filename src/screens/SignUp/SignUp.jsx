@@ -26,6 +26,9 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export const SignUp = ({navigation}) => {
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [contact, setContact] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -36,6 +39,33 @@ export const SignUp = ({navigation}) => {
         <Image source={logo} style={styles.image} resizeMode="contain" />
         <Text style={styles.title}>Sign Up</Text>
         <View style={styles.inputView}>
+          <TextInput
+            style={styles.input}
+            placeholder="FirstName"
+            secureTextEntry
+            value={firstname}
+            onChangeText={setFirstname}
+            autoCorrect={false}
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="LastName"
+            secureTextEntry
+            value={lastname}
+            onChangeText={setLastname}
+            autoCorrect={false}
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Contact No."
+            secureTextEntry
+            value={contact}
+            onChangeText={setContact}
+            autoCorrect={false}
+            autoCapitalize="none"
+          />
           <TextInput
             style={styles.input}
             placeholder="Email"
