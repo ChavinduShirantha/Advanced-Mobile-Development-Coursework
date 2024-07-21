@@ -12,6 +12,7 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
+import Icon from "react-native-vector-icons/MaterialIcons";
 const logo = require('../../assets/img/tulip_logo.png');
 const bg = require('../../assets/img/main_bg.jpg');
 
@@ -73,7 +74,9 @@ export const SignIn = ({navigation}) => {
           <Pressable
             style={styles.button}
             onPress={() => navigation.navigate('HomeNavigation')}>
-            <Text style={styles.buttonText}>LOGIN</Text>
+            <Text style={styles.buttonText}>
+              LOGIN <Icon name="login" size={20} color="#fff" />
+            </Text>
           </Pressable>
           <Text style={styles.optionsText}>OR LOGIN WITH</Text>
         </View>
