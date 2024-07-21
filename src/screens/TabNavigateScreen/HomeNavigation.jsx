@@ -10,7 +10,10 @@ const Tab = createBottomTabNavigator();
 
 export const HomeNavigation = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        headerTitleAlign: 'center', // Center the title
+      }}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
@@ -21,7 +24,7 @@ export const HomeNavigation = () => {
         }}
       />
       <Tab.Screen
-        name="Favorite"
+        name="Favorites"
         component={FavoritesScreen}
         options={{
           tabBarIcon: ({color, size}) => (

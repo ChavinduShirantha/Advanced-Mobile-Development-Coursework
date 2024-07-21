@@ -6,8 +6,8 @@
  */
 
 import React from 'react';
-import {SignIn} from './src/components/SignIn/SignIn';
-import {SignUp} from './src/components/SignUp/SignUp';
+import {SignIn} from './src/screens/SignIn/SignIn';
+import {SignUp} from './src/screens/SignUp/SignUp';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {HomeNavigation} from './src/screens/TabNavigateScreen/HomeNavigation';
