@@ -10,7 +10,7 @@ import {
   Switch,
   Pressable,
   ImageBackground,
-  Dimensions,
+  Dimensions, ScrollView,
 } from 'react-native';
 
 const logo = require('../../assets/img/tulip_logo.png');
@@ -33,8 +33,101 @@ export const SignUp = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
+  const [errors, setErrors] = useState({});
+
+  const validateFirstname = text => {
+    setFirstname(text);
+    const nameRegex = /^[A-Za-z\s]{3,10}$/;
+    if (!nameRegex.test(text)) {
+      setErrors(prev => ({
+        ...prev,
+        firstname:
+          'First name can only contain letters and between 3 & 10 characters',
+      }));
+    } else {
+      setErrors(prev => ({...prev, firstname: null}));
+    }
+  };
+
+  const validateLastname = text => {
+    setLastname(text);
+    const nameRegex = /^[A-Za-z\s]{3,10}$/;
+    if (!nameRegex.test(text)) {
+      setErrors(prev => ({
+        ...prev,
+        lastname:
+          'Last name can only contain letters and between 3 & 10 characters',
+      }));
+    } else {
+      setErrors(prev => ({...prev, lastname: null}));
+    }
+  };
+
+  const validateContact = text => {
+    setContact(text);
+    const phoneRegex = /^\d{10}$/;
+    if (!text || !phoneRegex.test(text)) {
+      setErrors(prev => ({
+        ...prev,
+        contact: 'Valid contact number is required',
+      }));
+    } else {
+      setErrors(prev => ({...prev, contact: null}));
+    }
+  };
+
+  const validateEmail = text => {
+    setEmail(text);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!text || !emailRegex.test(text)) {
+      setErrors(prev => ({...prev, email: 'Valid email is required'}));
+    } else {
+      setErrors(prev => ({...prev, email: null}));
+    }
+  };
+
+  const validateUsername = text => {
+    setUsername(text);
+    if (!text) {
+      setErrors(prev => ({...prev, username: 'Username is required'}));
+    } else {
+      setErrors(prev => ({...prev, username: null}));
+    }
+  };
+
+  const validatePassword = text => {
+    setPassword(text);
+    if (!text) {
+      setErrors(prev => ({...prev, password: 'Password is required'}));
+    } else if (text.length < 6) {
+      setErrors(prev => ({
+        ...prev,
+        password: 'Password must be at least 6 characters',
+      }));
+    } else {
+      setErrors(prev => ({...prev, password: null}));
+    }
+  };
+
+  const handleSignUp = () => {
+    if (
+      !errors.firstname &&
+      !errors.lastname &&
+      !errors.contact &&
+      !errors.email &&
+      !errors.username &&
+      !errors.password
+    ) {
+      Alert.alert('Sign Up Successfully!');
+    } else {
+      Alert.alert('Please correct the errors');
+    }
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled">
       <ImageBackground source={bg} resizeMode="cover" style={styles.bg}>
         <Image source={logo} style={styles.image} resizeMode="contain" />
         <Text style={styles.title}>Sign Up</Text>
@@ -42,62 +135,72 @@ export const SignUp = ({navigation}) => {
           <TextInput
             style={styles.input}
             placeholder="FirstName"
-            secureTextEntry
             value={firstname}
-            onChangeText={setFirstname}
+            onChangeText={validateFirstname}
             autoCorrect={false}
             autoCapitalize="none"
           />
+          {errors.firstname && (
+            <Text style={styles.errorText}>{errors.firstname}</Text>
+          )}
           <TextInput
             style={styles.input}
             placeholder="LastName"
-            secureTextEntry
             value={lastname}
-            onChangeText={setLastname}
+            onChangeText={validateLastname}
             autoCorrect={false}
             autoCapitalize="none"
           />
+          {errors.lastname && (
+            <Text style={styles.errorText}>{errors.lastname}</Text>
+          )}
           <TextInput
             style={styles.input}
             placeholder="Contact No."
-            secureTextEntry
             value={contact}
-            onChangeText={setContact}
+            onChangeText={validateContact}
             autoCorrect={false}
             autoCapitalize="none"
           />
+          {errors.contact && (
+            <Text style={styles.errorText}>{errors.contact}</Text>
+          )}
           <TextInput
             style={styles.input}
             placeholder="Email"
-            secureTextEntry
             value={email}
-            onChangeText={setEmail}
+            onChangeText={validateEmail}
             autoCorrect={false}
             autoCapitalize="none"
           />
+          {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
           <TextInput
             style={styles.input}
             placeholder="USERNAME"
             value={username}
-            onChangeText={setUsername}
+            onChangeText={validateUsername}
             autoCorrect={false}
             autoCapitalize="none"
           />
+          {errors.username && (
+            <Text style={styles.errorText}>{errors.username}</Text>
+          )}
           <TextInput
             style={styles.input}
             placeholder="PASSWORD"
             secureTextEntry
             value={password}
-            onChangeText={setPassword}
+            onChangeText={validatePassword}
             autoCorrect={false}
             autoCapitalize="none"
           />
+          {errors.password && (
+            <Text style={styles.errorText}>{errors.password}</Text>
+          )}
         </View>
 
         <View style={styles.buttonView}>
-          <Pressable
-            style={styles.button}
-            onPress={() => Alert.alert('Login Successfully!')}>
+          <Pressable style={styles.button} onPress={() => handleSignUp()}>
             <Text style={styles.buttonText}>Sign Up</Text>
           </Pressable>
           <Text style={styles.optionsText}>OR Sign Up WITH</Text>
@@ -118,7 +221,7 @@ export const SignUp = ({navigation}) => {
           </Pressable>
         </Text>
       </ImageBackground>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
@@ -205,5 +308,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     textDecorationLine: 'underline',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 5,
+    paddingLeft: 20,
   },
 });
