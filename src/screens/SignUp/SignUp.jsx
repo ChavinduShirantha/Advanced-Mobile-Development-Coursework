@@ -6,11 +6,10 @@ import {
   Alert,
   Image,
   StyleSheet,
-  SafeAreaView,
-  Switch,
-  Pressable,
   ImageBackground,
-  Dimensions, ScrollView,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 
 const logo = require('../../assets/img/tulip_logo.png');
@@ -200,9 +199,11 @@ export const SignUp = ({navigation}) => {
         </View>
 
         <View style={styles.buttonView}>
-          <Pressable style={styles.button} onPress={() => handleSignUp()}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleSignUp()}>
             <Text style={styles.buttonText}>Sign Up</Text>
-          </Pressable>
+          </TouchableOpacity>
           <Text style={styles.optionsText}>OR Sign Up WITH</Text>
         </View>
 
@@ -216,9 +217,9 @@ export const SignUp = ({navigation}) => {
 
         <Text style={styles.footerText}>
           Do Have Account?
-          <Pressable onPress={() => navigation.navigate('SignIn')}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
             <Text style={styles.signIn}>Sign In</Text>
-          </Pressable>
+          </TouchableOpacity>
         </Text>
       </ImageBackground>
     </ScrollView>

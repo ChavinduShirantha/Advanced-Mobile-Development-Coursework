@@ -2,21 +2,13 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  Button,
   Alert,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
-  Image,
   TextInput,
-  Pressable,
   ScrollView,
-  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
-const screenHeight = Dimensions.get('window').height;
-const screenWidth = Dimensions.get('window').width;
 
 export const ProfileScreen = ({navigation}) => {
   const [firstname, setFirstname] = useState('');
@@ -180,11 +172,11 @@ export const ProfileScreen = ({navigation}) => {
       </View>
 
       <View style={styles.updateButtonView}>
-        <Pressable style={styles.updateButton}>
+        <TouchableOpacity style={styles.updateButton}>
           <Text style={styles.updateButtonText}>
             Update <Icon name="update" size={20} color="#fff" />
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.buttonView}>

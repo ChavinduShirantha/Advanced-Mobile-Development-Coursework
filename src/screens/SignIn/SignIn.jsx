@@ -8,9 +8,9 @@ import {
   StyleSheet,
   SafeAreaView,
   Switch,
-  Pressable,
   ImageBackground,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import Icon from "react-native-vector-icons/MaterialIcons";
 const logo = require('../../assets/img/tulip_logo.png');
@@ -64,20 +64,20 @@ export const SignIn = ({navigation}) => {
             <Text style={styles.rememberText}>Remember Me</Text>
           </View>
           <View>
-            <Pressable onPress={() => Alert.alert('Forget Password!')}>
+            <TouchableOpacity onPress={() => Alert.alert('Forget Password!')}>
               <Text style={styles.forgetText}>Forgot Password?</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.buttonView}>
-          <Pressable
+          <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate('HomeNavigation')}>
             <Text style={styles.buttonText}>
               LOGIN <Icon name="login" size={20} color="#fff" />
             </Text>
-          </Pressable>
+          </TouchableOpacity>
           <Text style={styles.optionsText}>OR LOGIN WITH</Text>
         </View>
 
@@ -91,9 +91,9 @@ export const SignIn = ({navigation}) => {
 
         <Text style={styles.footerText}>
           Don't Have Account?
-          <Pressable onPress={() => navigation.navigate('SignUp')}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.signup}>Sign Up</Text>
-          </Pressable>
+          </TouchableOpacity>
         </Text>
       </ImageBackground>
     </SafeAreaView>
