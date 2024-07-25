@@ -96,9 +96,9 @@ export const SignUp = ({navigation}) => {
           firstname,
           lastname,
           contact,
+          email,
           username,
           password,
-          email,
         };
 
         const path = RNFS.DocumentDirectoryPath + '/signupData.json';
@@ -125,6 +125,13 @@ export const SignUp = ({navigation}) => {
         }
 
         Alert.alert('Sign Up Successfully!');
+
+        setFirstname('');
+        setLastname('');
+        setContact('');
+        setEmail('');
+        setUsername('');
+        setPassword('');
       } catch (error) {
         console.error(error);
         Alert.alert('Error saving data');
