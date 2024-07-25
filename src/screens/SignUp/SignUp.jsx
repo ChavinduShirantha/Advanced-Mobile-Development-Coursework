@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TextInput,
   View,
@@ -11,6 +11,9 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFS from 'react-native-fs';
 
 const logo = require('../../assets/img/tulip_logo.png');
 const bg = require('../../assets/img/main_bg.jpg');
@@ -34,81 +37,134 @@ export const SignUp = ({navigation}) => {
 
   const [errors, setErrors] = useState({});
 
-  const validateFirstname = text => {
-    setFirstname(text);
-    const nameRegex = /^[A-Za-z\s]{3,10}$/;
-    if (!nameRegex.test(text)) {
-      setErrors(prev => ({
-        ...prev,
-        firstname:
-          'First name can only contain letters and between 3 & 10 characters',
-      }));
-    } else {
-      setErrors(prev => ({...prev, firstname: null}));
+  const validateInput = (text, type, updateState) => {
+    let errorMessage = null;
+    switch (type) {
+      case 'firstname':
+      case 'lastname':
+        const nameRegex = /^[A-Za-z\s]{3,10}$/;
+        if (!nameRegex.test(text)) {
+          errorMessage = `${
+            type === 'firstname' ? 'First' : 'Last'
+          } name can only contain letters and be between 3 & 10 characters`;
+        }
+        break;
+      case 'contact':
+        const phoneRegex = /^\d{10}$/;
+        if (!text || !phoneRegex.test(text)) {
+          errorMessage = 'Valid contact number is required';
+        }
+        break;
+      case 'email':
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!text || !emailRegex.test(text)) {
+          errorMessage = 'Valid email is required';
+        }
+        break;
+      case 'username':
+        if (!text) {
+          errorMessage = 'Username is required';
+        }
+        break;
+      case 'password':
+        if (!text) {
+          errorMessage = 'Password is required';
+        } else if (text.length < 6) {
+          errorMessage = 'Password must be at least 6 characters';
+        }
+        break;
+      default:
+        break;
+    }
+    setErrors(prev => ({...prev, [type]: errorMessage}));
+    if (updateState) {
+      updateState(text);
     }
   };
 
-  const validateLastname = text => {
-    setLastname(text);
-    const nameRegex = /^[A-Za-z\s]{3,10}$/;
-    if (!nameRegex.test(text)) {
-      setErrors(prev => ({
-        ...prev,
-        lastname:
-          'Last name can only contain letters and between 3 & 10 characters',
-      }));
+  const handleSignUp = async () => {
+    if (
+      !errors.firstname &&
+      !errors.lastname &&
+      !errors.contact &&
+      !errors.email &&
+      !errors.username &&
+      !errors.password
+    ) {
+      try {
+        const signupData = {
+          firstname,
+          lastname,
+          contact,
+          username,
+          password,
+          email,
+        };
+
+        const path = RNFS.DocumentDirectoryPath + '/signupData.json';
+        console.log('File path:', path);
+        // Check if the file already exists
+        const fileExists = await RNFS.exists(path);
+        if (fileExists) {
+          // Read the existing file
+          const existingData = await RNFS.readFile(path);
+          const existingDataParsed = JSON.parse(existingData);
+
+          // Append new data
+          existingDataParsed.push(signupData);
+
+          // Write the updated data
+          await RNFS.writeFile(
+            path,
+            JSON.stringify(existingDataParsed),
+            'utf8',
+          );
+        } else {
+          // Create the file and write data
+          await RNFS.writeFile(path, JSON.stringify([signupData]), 'utf8');
+        }
+
+        Alert.alert('Sign Up Successfully!');
+      } catch (error) {
+        console.error(error);
+        Alert.alert('Error saving data');
+      }
     } else {
-      setErrors(prev => ({...prev, lastname: null}));
+      Alert.alert('Please correct the errors');
     }
   };
 
-  const validateContact = text => {
-    setContact(text);
-    const phoneRegex = /^\d{10}$/;
-    if (!text || !phoneRegex.test(text)) {
-      setErrors(prev => ({
-        ...prev,
-        contact: 'Valid contact number is required',
-      }));
-    } else {
-      setErrors(prev => ({...prev, contact: null}));
-    }
-  };
+  /*  const handleSignUp = async () => {
+    if (
+      !errors.firstname &&
+      !errors.lastname &&
+      !errors.contact &&
+      !errors.email &&
+      !errors.username &&
+      !errors.password
+    ) {
+      try {
+        const signupData = {
+          firstname,
+          lastname,
+          contact,
+          username,
+          password,
+          email,
+        };
 
-  const validateEmail = text => {
-    setEmail(text);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!text || !emailRegex.test(text)) {
-      setErrors(prev => ({...prev, email: 'Valid email is required'}));
+        // Save data to AsyncStorage
+        await AsyncStorage.setItem('signupData', JSON.stringify(signupData));
+        Alert.alert('Sign Up Successfully!');
+      } catch (error) {
+        Alert.alert('Error saving data');
+      }
     } else {
-      setErrors(prev => ({...prev, email: null}));
+      Alert.alert('Please correct the errors');
     }
-  };
+  };*/
 
-  const validateUsername = text => {
-    setUsername(text);
-    if (!text) {
-      setErrors(prev => ({...prev, username: 'Username is required'}));
-    } else {
-      setErrors(prev => ({...prev, username: null}));
-    }
-  };
-
-  const validatePassword = text => {
-    setPassword(text);
-    if (!text) {
-      setErrors(prev => ({...prev, password: 'Password is required'}));
-    } else if (text.length < 6) {
-      setErrors(prev => ({
-        ...prev,
-        password: 'Password must be at least 6 characters',
-      }));
-    } else {
-      setErrors(prev => ({...prev, password: null}));
-    }
-  };
-
-  const handleSignUp = () => {
+  /*const handleSignUp = async () => {
     if (
       !errors.firstname &&
       !errors.lastname &&
@@ -121,7 +177,7 @@ export const SignUp = ({navigation}) => {
     } else {
       Alert.alert('Please correct the errors');
     }
-  };
+  };*/
 
   return (
     <ScrollView
@@ -135,7 +191,9 @@ export const SignUp = ({navigation}) => {
             style={styles.input}
             placeholder="FirstName"
             value={firstname}
-            onChangeText={validateFirstname}
+            onChangeText={text =>
+              validateInput(text, 'firstname', setFirstname)
+            }
             autoCorrect={false}
             autoCapitalize="none"
           />
@@ -146,7 +204,7 @@ export const SignUp = ({navigation}) => {
             style={styles.input}
             placeholder="LastName"
             value={lastname}
-            onChangeText={validateLastname}
+            onChangeText={text => validateInput(text, 'lastname', setLastname)}
             autoCorrect={false}
             autoCapitalize="none"
           />
@@ -157,7 +215,7 @@ export const SignUp = ({navigation}) => {
             style={styles.input}
             placeholder="Contact No."
             value={contact}
-            onChangeText={validateContact}
+            onChangeText={text => validateInput(text, 'contact', setContact)}
             autoCorrect={false}
             autoCapitalize="none"
           />
@@ -168,7 +226,7 @@ export const SignUp = ({navigation}) => {
             style={styles.input}
             placeholder="Email"
             value={email}
-            onChangeText={validateEmail}
+            onChangeText={text => validateInput(text, 'email', setEmail)}
             autoCorrect={false}
             autoCapitalize="none"
           />
@@ -177,7 +235,7 @@ export const SignUp = ({navigation}) => {
             style={styles.input}
             placeholder="USERNAME"
             value={username}
-            onChangeText={validateUsername}
+            onChangeText={text => validateInput(text, 'username', setUsername)}
             autoCorrect={false}
             autoCapitalize="none"
           />
@@ -189,7 +247,7 @@ export const SignUp = ({navigation}) => {
             placeholder="PASSWORD"
             secureTextEntry
             value={password}
-            onChangeText={validatePassword}
+            onChangeText={text => validateInput(text, 'password', setPassword)}
             autoCorrect={false}
             autoCapitalize="none"
           />
@@ -199,9 +257,7 @@ export const SignUp = ({navigation}) => {
         </View>
 
         <View style={styles.buttonView}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => handleSignUp()}>
+          <TouchableOpacity style={styles.button} onPress={handleSignUp}>
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
           <Text style={styles.optionsText}>OR Sign Up WITH</Text>
