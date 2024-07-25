@@ -102,13 +102,35 @@ export const SignUp = ({navigation}) => {
         };
 
         const path = RNFS.DocumentDirectoryPath + '/signupData.json';
-        console.log('File path:', path);
+        // console.log('File path:', path);
         // Check if the file already exists
         const fileExists = await RNFS.exists(path);
         if (fileExists) {
           // Read the existing file
           const existingData = await RNFS.readFile(path);
           const existingDataParsed = JSON.parse(existingData);
+
+          // Check if the username or email already exists
+          const usernameExists = existingDataParsed.some(
+            user => user.username === username,
+          );
+          const emailExists = existingDataParsed.some(
+            user => user.email === email,
+          );
+
+          if (usernameExists) {
+            Alert.alert(
+              'Username already exists. Please choose a different one.',
+            );
+            return;
+          }
+
+          if (emailExists) {
+            Alert.alert(
+              'Email already exists. Please use a different email address.',
+            );
+            return;
+          }
 
           // Append new data
           existingDataParsed.push(signupData);
