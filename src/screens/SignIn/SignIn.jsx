@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import RNFS from 'react-native-fs';
+import Toast from 'react-native-toast-message';
 const logo = require('../../assets/img/tulip_logo.png');
 const bg = require('../../assets/img/main_bg.jpg');
 
@@ -33,7 +34,11 @@ export const SignIn = ({navigation}) => {
 
   const handleLogin = async () => {
     if (!username || !password) {
-      Alert.alert('Error', 'Username and password cannot be empty.');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Username and password cannot be empty.',
+      });
       return;
     }
 
@@ -49,7 +54,11 @@ export const SignIn = ({navigation}) => {
           existingDataParsed = JSON.parse(existingData);
         } catch (error) {
           console.error('Failed to parse JSON:', error);
-          Alert.alert('Error', 'Failed to read user data.');
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Failed to read user data.',
+          });
           return;
         }
 
@@ -58,20 +67,36 @@ export const SignIn = ({navigation}) => {
         );
 
         if (login) {
-          Alert.alert('Login Successfully!');
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'Login Successfully!',
+          });
           navigation.navigate('HomeNavigation');
         } else {
-          Alert.alert('Invalid username or password.');
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Invalid username or password.',
+          });
         }
       } else {
-        Alert.alert('No user data found.');
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'No user data found.',
+        });
       }
 
       setUsername('');
       setPassword('');
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Login Unsuccessfully');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Login Unsuccessfully',
+      });
     }
   };
 
