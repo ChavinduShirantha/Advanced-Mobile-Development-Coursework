@@ -11,6 +11,7 @@ import {SignUp} from './src/screens/SignUp/SignUp';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {HomeNavigation} from './src/screens/TabNavigateScreen/HomeNavigation';
+import Toast from "react-native-toast-message";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="HomeNavigation" component={HomeNavigation} />
       </Stack.Navigator>
+      <Toast />
     </NavigationContainer>
   );
 }

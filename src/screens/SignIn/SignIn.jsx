@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import RNFS from 'react-native-fs';
 const logo = require('../../assets/img/tulip_logo.png');
 const bg = require('../../assets/img/main_bg.jpg');
 
@@ -29,6 +30,50 @@ export const SignIn = ({navigation}) => {
   const [click, setClick] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    if (!username || !password) {
+      Alert.alert('Error', 'Username and password cannot be empty.');
+      return;
+    }
+
+    try {
+      const path = RNFS.DocumentDirectoryPath + '/signupData.json';
+
+      const fileExists = await RNFS.exists(path);
+      if (fileExists) {
+        const existingData = await RNFS.readFile(path);
+        let existingDataParsed;
+
+        try {
+          existingDataParsed = JSON.parse(existingData);
+        } catch (error) {
+          console.error('Failed to parse JSON:', error);
+          Alert.alert('Error', 'Failed to read user data.');
+          return;
+        }
+
+        const login = existingDataParsed.find(
+          user => user.username === username && user.password === password,
+        );
+
+        if (login) {
+          Alert.alert('Login Successfully!');
+          navigation.navigate('HomeNavigation');
+        } else {
+          Alert.alert('Invalid username or password.');
+        }
+      } else {
+        Alert.alert('No user data found.');
+      }
+
+      setUsername('');
+      setPassword('');
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Login Unsuccessfully');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -71,9 +116,7 @@ export const SignIn = ({navigation}) => {
         </View>
 
         <View style={styles.buttonView}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('HomeNavigation')}>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>
               LOGIN <Icon name="login" size={20} color="#fff" />
             </Text>
