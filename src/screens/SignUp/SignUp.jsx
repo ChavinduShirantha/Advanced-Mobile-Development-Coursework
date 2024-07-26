@@ -147,6 +147,7 @@ export const SignUp = ({navigation}) => {
         }
 
         Alert.alert('Sign Up Successfully!');
+        navigation.navigate('SignIn');
 
         setFirstname('');
         setLastname('');

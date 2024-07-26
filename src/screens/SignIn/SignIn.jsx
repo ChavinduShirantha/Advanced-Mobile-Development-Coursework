@@ -12,7 +12,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import Icon from "react-native-vector-icons/MaterialIcons";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 const logo = require('../../assets/img/tulip_logo.png');
 const bg = require('../../assets/img/main_bg.jpg');
 
