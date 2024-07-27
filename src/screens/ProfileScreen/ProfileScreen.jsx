@@ -218,6 +218,66 @@ export const ProfileScreen = ({navigation, route}) => {
     }
   };
 
+  const deleteUser = async username => {
+    try {
+      const path = RNFS.DocumentDirectoryPath + '/signupData.json';
+      const fileExists = await RNFS.exists(path);
+
+      if (fileExists) {
+        // Read the existing file
+        const existingData = await RNFS.readFile(path);
+        const existingDataParsed = JSON.parse(existingData);
+
+        // Find the index of the user to delete
+        const userIndex = existingDataParsed.findIndex(
+          user => user.username === username,
+        );
+
+        if (userIndex === -1) {
+          console.log('User not found.');
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'User not found. ',
+          });
+          return;
+        }
+
+        existingDataParsed.splice(userIndex, 1);
+
+        await RNFS.writeFile(path, JSON.stringify(existingDataParsed), 'utf8');
+
+        console.log('User Account deleted successfully!');
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'User Account deleted successfully!',
+        });
+        navigation.navigate('SignIn');
+      } else {
+        console.log('No user data found.');
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'No user data found. ',
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      console.log('Error deleting user data');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Error deleting user data .',
+      });
+    }
+  };
+
+  const handleOnDelete = async () => {
+    const username = route.params.username; // Replace with actual username
+    await deleteUser(username);
+  };
+
   const handleLogout = () => {
     console.log('Logged out', 'You have been successfully logged out.');
     Toast.show({
@@ -331,7 +391,7 @@ export const ProfileScreen = ({navigation, route}) => {
       </View>
 
       <View style={styles.buttonView}>
-        <TouchableOpacity style={styles.deleteButton}>
+        <TouchableOpacity style={styles.deleteButton} onPress={handleOnDelete}>
           <Text style={styles.deleteButtonText}>
             Delete Account <Icon name="delete" size={20} color="#fff" />
           </Text>
