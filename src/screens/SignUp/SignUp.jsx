@@ -14,6 +14,7 @@ import {
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFS from 'react-native-fs';
+import Toast from 'react-native-toast-message';
 
 const logo = require('../../assets/img/tulip_logo.png');
 const bg = require('../../assets/img/main_bg.jpg');
@@ -119,16 +120,27 @@ export const SignUp = ({navigation}) => {
           );
 
           if (usernameExists) {
-            Alert.alert(
+            console.log(
               'Username already exists. Please choose a different one.',
             );
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'Username already exists. Please choose a different one.',
+            });
             return;
           }
 
           if (emailExists) {
-            Alert.alert(
+            console.log(
               'Email already exists. Please use a different email address.',
             );
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2:
+                'Email already exists. Please use a different email address.',
+            });
             return;
           }
 
@@ -146,7 +158,12 @@ export const SignUp = ({navigation}) => {
           await RNFS.writeFile(path, JSON.stringify([signupData]), 'utf8');
         }
 
-        Alert.alert('Sign Up Successfully!');
+        console.log('Sign Up Successfully!');
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Sign Up Successfully!',
+        });
         navigation.navigate('SignIn');
 
         setFirstname('');
@@ -157,10 +174,20 @@ export const SignUp = ({navigation}) => {
         setPassword('');
       } catch (error) {
         console.error(error);
-        Alert.alert('Error saving data');
+        console.log('Error saving data');
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Error saving data',
+        });
       }
     } else {
-      Alert.alert('Please correct the errors');
+      console.log('Please correct the errors');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please correct the errors',
+      });
     }
   };
 
