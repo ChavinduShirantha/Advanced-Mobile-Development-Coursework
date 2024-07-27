@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import RNFS from 'react-native-fs';
 
 export const ProfileScreen = ({navigation, route}) => {
   const [firstname, setFirstname] = useState(route.params.firstname || '');
@@ -64,6 +65,115 @@ export const ProfileScreen = ({navigation, route}) => {
     setErrors(prev => ({...prev, [type]: errorMessage}));
     if (updateState) {
       updateState(text);
+    }
+  };
+
+  const handleOnUpdate = async () => {
+    if (
+      !errors.firstname &&
+      !errors.lastname &&
+      !errors.contact &&
+      !errors.email &&
+      !errors.username &&
+      !errors.password
+    ) {
+      try {
+        const updatedData = {
+          firstname,
+          lastname,
+          contact,
+          email,
+          username,
+          password,
+        };
+
+        const path = RNFS.DocumentDirectoryPath + '/signupData.json';
+        const fileExists = await RNFS.exists(path);
+
+        if (fileExists) {
+          const existingData = await RNFS.readFile(path);
+          const existingDataParsed = JSON.parse(existingData);
+
+          const userIndex = existingDataParsed.findIndex(
+            user => user.username === username,
+          );
+
+          if (userIndex === -1) {
+            Alert.alert('User not found. Please check the username.');
+            return;
+          }
+
+          existingDataParsed[userIndex] = updatedData;
+
+          await RNFS.writeFile(
+            path,
+            JSON.stringify(existingDataParsed),
+            'utf8',
+          );
+
+          Alert.alert('Profile updated successfully!');
+          setFirstname('');
+          setLastname('');
+          setContact('');
+          setEmail('');
+          setUsername('');
+          setPassword('');
+          await fetchUserData();
+        } else {
+          Alert.alert('No user data found to update.');
+        }
+      } catch (error) {
+        console.error(error);
+        Alert.alert('Error updating data');
+      }
+    } else {
+      Alert.alert('Please correct the errors');
+    }
+  };
+
+  const getUser = async username => {
+    try {
+      const path = RNFS.DocumentDirectoryPath + '/signupData.json';
+      const fileExists = await RNFS.exists(path);
+
+      if (fileExists) {
+        const existingData = await RNFS.readFile(path);
+        const existingDataParsed = JSON.parse(existingData);
+
+        const user = existingDataParsed.find(
+          user => user.username === username,
+        );
+
+        if (user) {
+          console.log('User Data:', user);
+          return user;
+        } else {
+          Alert.alert('User not found.');
+          return null;
+        }
+      } else {
+        Alert.alert('No user data found.');
+        return null;
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error retrieving user data');
+      return null;
+    }
+  };
+
+  const fetchUserData = async () => {
+    const username = route.params.username; // Replace with actual username
+    const user = await getUser(username);
+
+    if (user) {
+      setFirstname(user.firstname);
+      setLastname(user.lastname);
+      setContact(user.contact);
+      setEmail(user.email);
+      setUsername(user.username);
+      setPassword(user.password);
+      console.log('Fetched User Data:', user);
     }
   };
 
@@ -126,6 +236,7 @@ export const ProfileScreen = ({navigation, route}) => {
           value={username}
           onChangeText={text => validateInput(text, 'username', setUsername)}
           autoCorrect={false}
+          editable={false}
           autoCapitalize="none"
         />
         {errors.username && (
@@ -166,7 +277,7 @@ export const ProfileScreen = ({navigation, route}) => {
       </View>
 
       <View style={styles.updateButtonView}>
-        <TouchableOpacity style={styles.updateButton}>
+        <TouchableOpacity style={styles.updateButton} onPress={handleOnUpdate}>
           <Text style={styles.updateButtonText}>
             Update <Icon name="update" size={20} color="#fff" />
           </Text>
