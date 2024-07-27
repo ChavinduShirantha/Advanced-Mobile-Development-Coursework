@@ -15,6 +15,7 @@ import {
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFS from 'react-native-fs';
 import Toast from 'react-native-toast-message';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const logo = require('../../assets/img/tulip_logo.png');
 const bg = require('../../assets/img/main_bg.jpg');
@@ -37,6 +38,8 @@ export const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('');
 
   const [errors, setErrors] = useState({});
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const validateInput = (text, type, updateState) => {
     let errorMessage = null;
@@ -299,7 +302,7 @@ export const SignUp = ({navigation}) => {
           {errors.username && (
             <Text style={styles.errorText}>{errors.username}</Text>
           )}
-          <TextInput
+          {/*<TextInput
             style={styles.input}
             placeholder="PASSWORD"
             secureTextEntry
@@ -307,7 +310,27 @@ export const SignUp = ({navigation}) => {
             onChangeText={text => validateInput(text, 'password', setPassword)}
             autoCorrect={false}
             autoCapitalize="none"
-          />
+          />*/}
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="PASSWORD"
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            <TouchableOpacity
+              style={styles.eyeIcon}
+              onPress={() => setShowPassword(!showPassword)}>
+              <Icon
+                name={showPassword ? 'visibility' : 'visibility-off'}
+                size={20}
+                color="#fff"
+              />
+            </TouchableOpacity>
+          </View>
           {errors.password && (
             <Text style={styles.errorText}>{errors.password}</Text>
           )}
@@ -428,5 +451,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 5,
     paddingLeft: 20,
+  },
+  passwordContainer: {
+    position: 'relative',
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 15,
   },
 });
