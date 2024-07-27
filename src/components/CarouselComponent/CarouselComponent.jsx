@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: width * 0.95,
-    height: width * 0.3,
+    width: width * 0.9,
+    height: width * 0.29,
     borderRadius: 10,
   },
   title: {

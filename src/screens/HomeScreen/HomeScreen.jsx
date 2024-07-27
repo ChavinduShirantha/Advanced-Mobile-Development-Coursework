@@ -7,7 +7,9 @@ const {screenWidth} = Dimensions.get('window');
 export const HomeScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <CarouselComponent style={styles.carousel} />
+      <View style={styles.content}>
+        <CarouselComponent style={styles.carousel} />
+      </View>
     </ScrollView>
   );
 };
@@ -15,9 +17,11 @@ export const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
     paddingTop: 20,
+    alignItems: 'center',
+  },
+  content: {
+    padding: 20,
   },
   carousel: {
     width: screenWidth,
