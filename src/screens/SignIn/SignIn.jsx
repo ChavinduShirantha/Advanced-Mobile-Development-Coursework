@@ -72,7 +72,17 @@ export const SignIn = ({navigation}) => {
             text1: 'Success',
             text2: 'Login Successfully!',
           });
-          navigation.navigate('HomeNavigation');
+          navigation.navigate('HomeNavigation', {
+            screen: 'Profile',
+            params: {
+              username: login.username,
+              firstname: login.firstname,
+              lastname: login.lastname,
+              email: login.email,
+              contact: login.contact,
+              password: login.password,
+            },
+          });
         } else {
           Toast.show({
             type: 'error',
