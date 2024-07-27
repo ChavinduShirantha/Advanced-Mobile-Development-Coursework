@@ -31,6 +31,7 @@ export const SignIn = ({navigation}) => {
   const [click, setClick] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -124,7 +125,7 @@ export const SignIn = ({navigation}) => {
             autoCorrect={false}
             autoCapitalize="none"
           />
-          <TextInput
+          {/*<TextInput
             style={styles.input}
             placeholder="PASSWORD"
             secureTextEntry
@@ -132,7 +133,27 @@ export const SignIn = ({navigation}) => {
             onChangeText={setPassword}
             autoCorrect={false}
             autoCapitalize="none"
-          />
+          />*/}
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="PASSWORD"
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            <TouchableOpacity
+              style={styles.eyeIcon}
+              onPress={() => setShowPassword(!showPassword)}>
+              <Icon
+                name={showPassword ? 'visibility' : 'visibility-off'}
+                size={20}
+                color="#fff"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.rememberView}>
           <View style={styles.switch}>
@@ -282,5 +303,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     textDecorationLine: 'underline',
+  },
+  passwordContainer: {
+    position: 'relative',
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 15,
   },
 });
