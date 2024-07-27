@@ -20,6 +20,8 @@ export const ProfileScreen = ({navigation, route}) => {
 
   const [errors, setErrors] = useState({});
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const validateInput = (text, type, updateState) => {
     let errorMessage = null;
     switch (type) {
@@ -64,80 +66,6 @@ export const ProfileScreen = ({navigation, route}) => {
       updateState(text);
     }
   };
-
-  /*const validateFirstname = text => {
-    setFirstname(text);
-    const nameRegex = /^[A-Za-z\s]{3,10}$/;
-    if (!nameRegex.test(text)) {
-      setErrors(prev => ({
-        ...prev,
-        firstname:
-          'First name can only contain letters and between 3 & 10 characters',
-      }));
-    } else {
-      setErrors(prev => ({...prev, firstname: null}));
-    }
-  };
-
-  const validateLastname = text => {
-    setLastname(text);
-    const nameRegex = /^[A-Za-z\s]{3,10}$/;
-    if (!nameRegex.test(text)) {
-      setErrors(prev => ({
-        ...prev,
-        lastname:
-          'Last name can only contain letters and between 3 & 10 characters',
-      }));
-    } else {
-      setErrors(prev => ({...prev, lastname: null}));
-    }
-  };
-
-  const validateContact = text => {
-    setContact(text);
-    const phoneRegex = /^\d{10}$/;
-    if (!text || !phoneRegex.test(text)) {
-      setErrors(prev => ({
-        ...prev,
-        contact: 'Valid contact number is required',
-      }));
-    } else {
-      setErrors(prev => ({...prev, contact: null}));
-    }
-  };
-
-  const validateEmail = text => {
-    setEmail(text);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!text || !emailRegex.test(text)) {
-      setErrors(prev => ({...prev, email: 'Valid email is required'}));
-    } else {
-      setErrors(prev => ({...prev, email: null}));
-    }
-  };
-
-  const validateUsername = text => {
-    setUsername(text);
-    if (!text) {
-      setErrors(prev => ({...prev, username: 'Username is required'}));
-    } else {
-      setErrors(prev => ({...prev, username: null}));
-    }
-  };
-
-  const validatePassword = text => {
-    setPassword(text);
-    if (!text) {
-      setErrors(prev => ({...prev, password: 'Password is required'}));
-    } else if (text.length < 6) {
-      setErrors(prev => ({
-        ...prev,
-        password: 'Password must be at least 6 characters',
-      }));
-    } else {
-      setErrors(prev => ({...prev, password: null}));
-    }
-  };*/
 
   const handleLogout = () => {
     Alert.alert('Logged out', 'You have been successfully logged out.');
@@ -203,7 +131,7 @@ export const ProfileScreen = ({navigation, route}) => {
         {errors.username && (
           <Text style={styles.errorText}>{errors.username}</Text>
         )}
-        <TextInput
+        {/*<TextInput
           style={styles.input}
           placeholder="PASSWORD"
           secureTextEntry
@@ -211,7 +139,27 @@ export const ProfileScreen = ({navigation, route}) => {
           onChangeText={text => validateInput(text, 'password', setPassword)}
           autoCorrect={false}
           autoCapitalize="none"
-        />
+        />*/}
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="PASSWORD"
+            secureTextEntry={!showPassword}
+            value={password}
+            onChangeText={setPassword}
+            autoCorrect={false}
+            autoCapitalize="none"
+          />
+          <TouchableOpacity
+            style={styles.eyeIcon}
+            onPress={() => setShowPassword(!showPassword)}>
+            <Icon
+              name={showPassword ? 'visibility' : 'visibility-off'}
+              size={20}
+              color="#fff"
+            />
+          </TouchableOpacity>
+        </View>
         {errors.password && (
           <Text style={styles.errorText}>{errors.password}</Text>
         )}
@@ -329,5 +277,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
     color: '#0af',
+  },
+  passwordContainer: {
+    position: 'relative',
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    top: 15,
   },
 });
