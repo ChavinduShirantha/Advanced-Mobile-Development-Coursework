@@ -165,7 +165,15 @@ export const SignIn = ({navigation}) => {
             <Text style={styles.rememberText}>Remember Me</Text>
           </View>
           <View>
-            <TouchableOpacity onPress={() => Alert.alert('Forget Password!')}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log('Forget Password!'),
+                  Toast.show({
+                    type: 'error',
+                    text1: 'Forget Password!',
+                    text2: 'Currently this function is not available',
+                  });
+              }}>
               <Text style={styles.forgetText}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
