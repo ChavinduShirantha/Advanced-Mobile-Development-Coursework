@@ -11,7 +11,7 @@ import {SignUp} from './src/screens/SignUp/SignUp';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {HomeNavigation} from './src/screens/TabNavigateScreen/HomeNavigation';
-import Toast from "react-native-toast-message";
+import Toast from 'react-native-toast-message';
 
 const Stack = createNativeStackNavigator();
 
