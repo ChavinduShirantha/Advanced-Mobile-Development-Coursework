@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import RNFS from 'react-native-fs';
+import Toast from "react-native-toast-message";
 
 export const ProfileScreen = ({navigation, route}) => {
   const [firstname, setFirstname] = useState(route.params.firstname || '');
@@ -99,7 +100,12 @@ export const ProfileScreen = ({navigation, route}) => {
           );
 
           if (userIndex === -1) {
-            Alert.alert('User not found. Please check the username.');
+            console.log('User not found. Please check the username.');
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: 'User not found. Please check the username.',
+            });
             return;
           }
 
@@ -111,7 +117,12 @@ export const ProfileScreen = ({navigation, route}) => {
             'utf8',
           );
 
-          Alert.alert('Profile updated successfully!');
+          console.log('Profile updated successfully!');
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'Profile updated successfully!',
+          });
           setFirstname('');
           setLastname('');
           setContact('');
@@ -120,14 +131,29 @@ export const ProfileScreen = ({navigation, route}) => {
           setPassword('');
           await fetchUserData();
         } else {
-          Alert.alert('No user data found to update.');
+          console.log('No user data found to update.');
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'No user data found to update.',
+          });
         }
       } catch (error) {
         console.error(error);
-        Alert.alert('Error updating data');
+        console.log('Error updating data');
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Error updating data',
+        });
       }
     } else {
-      Alert.alert('Please correct the errors');
+      console.log('Please correct the errors');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please correct the errors',
+      });
     }
   };
 
@@ -148,16 +174,31 @@ export const ProfileScreen = ({navigation, route}) => {
           console.log('User Data:', user);
           return user;
         } else {
-          Alert.alert('User not found.');
+          console.log('User not found.');
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'User not found.',
+          });
           return null;
         }
       } else {
-        Alert.alert('No user data found.');
+        console.log('No user data found.');
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'No user data found.',
+        });
         return null;
       }
     } catch (error) {
       console.error(error);
-      Alert.alert('Error retrieving user data');
+      console.log('Error retrieving user data');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Error retrieving user data',
+      });
       return null;
     }
   };
@@ -178,7 +219,12 @@ export const ProfileScreen = ({navigation, route}) => {
   };
 
   const handleLogout = () => {
-    Alert.alert('Logged out', 'You have been successfully logged out.');
+    console.log('Logged out', 'You have been successfully logged out.');
+    Toast.show({
+      type: 'success',
+      text1: 'Logged out',
+      text2: 'You have been successfully logged out.',
+    });
     navigation.navigate('SignIn');
   };
 
