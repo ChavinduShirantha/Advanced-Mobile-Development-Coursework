@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, Dimensions} from 'react-native';
+import {View, Image, StyleSheet, Dimensions} from 'react-native';
 import Swiper from 'react-native-swiper';
 
 const {width} = Dimensions.get('window');
