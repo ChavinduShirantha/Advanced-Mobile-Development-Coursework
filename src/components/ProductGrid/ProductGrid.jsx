@@ -6,6 +6,7 @@ const products = require('../../assets/products.json');
 
 const ProductGrid = () => {
   const [favourites, setFavourites] = useState(new Set());
+  const [cart, setCart] = useState(new Map());
 
   const handleFavourite = product => {
     setFavourites(prevFavourites => {
@@ -23,6 +24,14 @@ const ProductGrid = () => {
     return favourites.has(product.id);
   };
 
+  const handleAddToCart = (product, count) => {
+    setCart(prevCart => {
+      const newCart = new Map(prevCart);
+      newCart.set(product.id, {...product, count});
+      return newCart;
+    });
+  };
+
   return (
     <FlatList
       data={products}
@@ -31,6 +40,7 @@ const ProductGrid = () => {
           item={item}
           onFavourite={handleFavourite}
           isFavourite={isFavourite(item)}
+          onAddToCart={handleAddToCart}
         />
       )}
       keyExtractor={item => item.id}

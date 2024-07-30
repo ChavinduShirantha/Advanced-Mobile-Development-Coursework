@@ -23,7 +23,7 @@ export const HomeNavigation = () => {
           ),
         }}
       />
-      <Tab.Screen
+      {/*<Tab.Screen
         name="Favorites"
         component={FavoritesScreen}
         options={{
@@ -31,7 +31,7 @@ export const HomeNavigation = () => {
             <Icon name="favorite" color={color} size={size} />
           ),
         }}
-      />
+      />*/}
       <Tab.Screen
         name="Cart"
         component={CartScreen}

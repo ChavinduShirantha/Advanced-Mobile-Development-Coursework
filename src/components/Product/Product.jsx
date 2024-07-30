@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -9,9 +9,33 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const Product = ({item, onFavourite, isFavourite}) => {
+const Product = ({item, onFavourite, isFavourite, onAddToCart}) => {
   const imageSource = getImageSource(item.image);
   const productStateSource = getProductStateSource(item.productState);
+  const [count, setCount] = useState(0);
+  const [isCartMode, setIsCartMode] = useState(false);
+
+  const handleIncrement = () => {
+    const newCount = count + 1;
+    setCount(newCount);
+    onAddToCart(item, newCount);
+  };
+
+  const handleDecrement = () => {
+    if (count > 1) {
+      const newCount = count - 1;
+      setCount(newCount);
+      onAddToCart(item, newCount);
+    } else {
+      setIsCartMode(false);
+    }
+  };
+
+  const handleAddToCart = () => {
+    setIsCartMode(true);
+    handleIncrement();
+  };
+
   return (
     <View style={styles.productContainer}>
       <Image source={productStateSource} style={styles.productState} />
@@ -27,9 +51,25 @@ const Product = ({item, onFavourite, isFavourite}) => {
         onPress={() => onFavourite(item)}>
         <Icon name="favorite" size={24} color={isFavourite ? 'red' : 'gray'} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Add to Cart</Text>
-      </TouchableOpacity>
+      <View style={styles.cartContainer}>
+        {!isCartMode ? (
+          <TouchableOpacity
+            style={styles.addToCartButton}
+            onPress={handleAddToCart}>
+            <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+          </TouchableOpacity>
+        ) : (
+          <>
+            <TouchableOpacity style={styles.button} onPress={handleDecrement}>
+              <Text style={styles.buttonText}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.count}>{count}</Text>
+            <TouchableOpacity style={styles.button} onPress={handleIncrement}>
+              <Text style={styles.buttonText}>+</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
     </View>
   );
 };
@@ -95,6 +135,11 @@ const styles = StyleSheet.create({
     height: 180,
     borderRadius: 5,
   },
+  cartContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
   productState: {
     position: 'absolute',
     width: '30%',
@@ -119,7 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#cfd4da',
   },
-  button: {
+  addToCartButton: {
     width: '100%',
     marginTop: 10,
     padding: 10,
@@ -127,7 +172,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
   },
-  buttonText: {
+  addToCartButtonText: {
     color: '#fff',
     fontWeight: 'bold',
   },
@@ -136,6 +181,25 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 10,
     right: 0,
+  },
+  button: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#2cc1fc',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  count: {
+    marginHorizontal: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#cfd4da',
   },
 });
 
