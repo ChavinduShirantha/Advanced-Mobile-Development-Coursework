@@ -7,8 +7,9 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const Product = ({item}) => {
+const Product = ({item, onFavourite, isFavourite}) => {
   const imageSource = getImageSource(item.image);
   const productStateSource = getProductStateSource(item.productState);
   return (
@@ -21,6 +22,11 @@ const Product = ({item}) => {
         {item.price}
         {item.currency}
       </Text>
+      <TouchableOpacity
+        style={styles.favouriteButton}
+        onPress={() => onFavourite(item)}>
+        <Icon name="favorite" size={24} color={isFavourite ? 'red' : 'gray'} />
+      </TouchableOpacity>
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Add to Cart</Text>
       </TouchableOpacity>
@@ -124,6 +130,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  favouriteButton: {
+    margin: 10,
+    position: 'absolute',
+    zIndex: 10,
+    right: 0,
   },
 });
 

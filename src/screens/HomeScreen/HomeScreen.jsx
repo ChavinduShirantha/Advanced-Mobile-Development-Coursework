@@ -1,5 +1,12 @@
 import React from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import CarouselComponent from '../../components/CarouselComponent/CarouselComponent';
 import ProductGrid from '../../components/ProductGrid/ProductGrid';
 
@@ -7,12 +14,12 @@ const {screenWidth} = Dimensions.get('window');
 
 export const HomeScreen = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <CarouselComponent style={styles.carousel} />
         <ProductGrid />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

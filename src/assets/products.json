@@ -1,9 +1,9 @@
 [
   {
-    "id": "1",
+    "id": 1,
     "description": "Intel Core I3-8GB-128GB+1TB 10th Gen PC",
     "name": "- Brand new desktop -",
-    "price": "122200",
+    "price": 122200,
     "currency": ".00 LKR",
     "image": "product1.jpg",
     "productState": "in_stock.png"
