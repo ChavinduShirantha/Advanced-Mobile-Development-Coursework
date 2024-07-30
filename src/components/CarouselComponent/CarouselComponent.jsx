@@ -36,8 +36,7 @@ const CarouselComponent = () => {
       dotStyle={styles.dot}
       autoplayDelay={2000}
       autoplayInterval={5000}
-      activeDotStyle={styles.activeDot}
-    >
+      activeDotStyle={styles.activeDot}>
       {data.map((item, index) => (
         <View key={index} style={styles.slide}>
           <Image source={item.image} style={styles.image} />
@@ -48,7 +47,10 @@ const CarouselComponent = () => {
 };
 
 const styles = StyleSheet.create({
-  wrapper: {},
+  wrapper: {
+    height: width * 0.35,
+    marginTop: 15,
+  },
   slide: {
     flex: 1,
     alignItems: 'center',
@@ -58,13 +60,8 @@ const styles = StyleSheet.create({
     height: width * 0.29,
     borderRadius: 10,
   },
-  title: {
-    marginTop: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
   pagination: {
-    bottom: 10,
+    bottom: 5,
   },
   dot: {
     backgroundColor: 'rgba(0,0,0,.2)',
