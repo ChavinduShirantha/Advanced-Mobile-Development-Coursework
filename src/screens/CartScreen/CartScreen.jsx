@@ -12,8 +12,13 @@ import {CartContext} from '../../context/CartContext/CartContext';
 import productImagesMappings from '../../assets/productImagesMappings';
 
 export const CartScreen = () => {
-  const {cartItems, removeFromCart, incrementQuantity, decrementQuantity} =
-    useContext(CartContext);
+  const {
+    cartItems,
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    clearCart,
+  } = useContext(CartContext);
 
   const handleRemoveItem = id => {
     removeFromCart(id);
@@ -35,7 +40,9 @@ export const CartScreen = () => {
   };
 
   const handlePurchaseOrder = () => {
-    Alert.alert('Purchase Order', 'Your order has been placed successfully!');
+    Alert.alert('Purchase Order', 'Your order has been placed successfully!', [
+      {text: 'OK', onPress: () => clearCart()},
+    ]);
   };
 
   const renderItem = ({item}) => (
