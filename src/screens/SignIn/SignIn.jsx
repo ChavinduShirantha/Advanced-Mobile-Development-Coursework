@@ -17,6 +17,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import RNFS from 'react-native-fs';
 import Toast from 'react-native-toast-message';
+import {useLoader} from '../../context/LoaderContext/LoaderContext';
 
 const logo = require('../../assets/img/tulip_logo.png');
 const loaderLogo = require('../../assets/img/logo.png');
@@ -36,7 +37,8 @@ export const SignIn = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const {setLoading} = useLoader();
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -237,7 +239,7 @@ export const SignIn = ({navigation}) => {
           </TouchableOpacity>
         </Text>
 
-        <Modal
+        {/*<Modal
           transparent={true}
           animationType="none"
           visible={loading}
@@ -253,7 +255,7 @@ export const SignIn = ({navigation}) => {
               <Text style={styles.loaderText}>Logging in...</Text>
             </View>
           </View>
-        </Modal>
+        </Modal>*/}
       </ImageBackground>
     </SafeAreaView>
   );
