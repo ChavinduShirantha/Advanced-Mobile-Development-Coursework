@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#e8e8e8',
   },
   list: {
     marginBottom: 20,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: 10,
     borderRadius: 5,
-    elevation: 2,
+    elevation: 5,
   },
   itemDescContainer: {
     alignItems: 'center',

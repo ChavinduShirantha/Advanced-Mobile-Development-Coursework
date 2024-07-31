@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 5,
     borderRadius: 10,
-    backgroundColor: '#4646469c',
+    backgroundColor: 'rgba(70,70,70,0.9)',
     alignItems: 'center',
   },
   image: {
