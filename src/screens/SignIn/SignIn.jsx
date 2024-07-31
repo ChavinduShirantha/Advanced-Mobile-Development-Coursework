@@ -81,6 +81,31 @@ export const SignIn = ({navigation}) => {
               lastname: login.lastname,
               email: login.email,
               contact: login.contact,
+              address: login.address,
+              password: login.password,
+            },
+          });
+          navigation.navigate('HomeNavigation', {
+            screen: 'Cart',
+            params: {
+              username: login.username,
+              firstname: login.firstname,
+              lastname: login.lastname,
+              email: login.email,
+              contact: login.contact,
+              address: login.address,
+              password: login.password,
+            },
+          });
+          navigation.navigate('HomeNavigation', {
+            screen: 'Home',
+            params: {
+              username: login.username,
+              firstname: login.firstname,
+              lastname: login.lastname,
+              email: login.email,
+              contact: login.contact,
+              address: login.address,
               password: login.password,
             },
           });

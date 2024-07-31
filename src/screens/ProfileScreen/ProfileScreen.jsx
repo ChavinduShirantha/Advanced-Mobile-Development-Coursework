@@ -16,6 +16,7 @@ export const ProfileScreen = ({navigation, route}) => {
   const [firstname, setFirstname] = useState(route.params.firstname || '');
   const [lastname, setLastname] = useState(route.params.lastname || '');
   const [contact, setContact] = useState(route.params.contact || '');
+  const [address, setAddress] = useState(route.params.address || '');
   const [username, setUsername] = useState(route.params.username || '');
   const [password, setPassword] = useState(route.params.password || '');
   const [email, setEmail] = useState(route.params.email || '');
@@ -40,6 +41,12 @@ export const ProfileScreen = ({navigation, route}) => {
         const phoneRegex = /^\d{10}$/;
         if (!text || !phoneRegex.test(text)) {
           errorMessage = 'Valid contact number is required';
+        }
+        break;
+      case 'address':
+        const addressRegex = /^[A-Za-z\s]{3,10}$/;
+        if (!addressRegex.test(text)) {
+          errorMessage = "Address can't contain belows 5 characters";
         }
         break;
       case 'email':
@@ -74,6 +81,7 @@ export const ProfileScreen = ({navigation, route}) => {
       !errors.firstname &&
       !errors.lastname &&
       !errors.contact &&
+      !errors.address &&
       !errors.email &&
       !errors.username &&
       !errors.password
@@ -83,6 +91,7 @@ export const ProfileScreen = ({navigation, route}) => {
           firstname,
           lastname,
           contact,
+          address,
           email,
           username,
           password,
@@ -126,6 +135,7 @@ export const ProfileScreen = ({navigation, route}) => {
           setFirstname('');
           setLastname('');
           setContact('');
+          setAddress('');
           setEmail('');
           setUsername('');
           setPassword('');
@@ -211,6 +221,7 @@ export const ProfileScreen = ({navigation, route}) => {
       setFirstname(user.firstname);
       setLastname(user.lastname);
       setContact(user.contact);
+      setAddress(user.address);
       setEmail(user.email);
       setUsername(user.username);
       setPassword(user.password);
@@ -321,6 +332,17 @@ export const ProfileScreen = ({navigation, route}) => {
           placeholder="Contact No."
           value={contact}
           onChangeText={text => validateInput(text, 'contact', setContact)}
+          autoCorrect={false}
+          autoCapitalize="none"
+        />
+        {errors.contact && (
+          <Text style={styles.errorText}>{errors.contact}</Text>
+        )}
+        <TextInput
+          style={styles.input}
+          placeholder="Address"
+          value={address}
+          onChangeText={text => validateInput(text, 'address', setAddress)}
           autoCorrect={false}
           autoCapitalize="none"
         />

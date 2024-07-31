@@ -10,6 +10,7 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -33,6 +34,7 @@ export const SignUp = ({navigation}) => {
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [contact, setContact] = useState('');
+  const [address, setAddress] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -57,6 +59,12 @@ export const SignUp = ({navigation}) => {
         const phoneRegex = /^\d{10}$/;
         if (!text || !phoneRegex.test(text)) {
           errorMessage = 'Valid contact number is required';
+        }
+        break;
+      case 'address':
+        const addressRegex = /^[A-Za-z\s]{5,20}$/;
+        if (!addressRegex.test(text)) {
+          errorMessage = "Address can't contain belows 5 characters";
         }
         break;
       case 'email':
@@ -88,9 +96,26 @@ export const SignUp = ({navigation}) => {
 
   const handleSignUp = async () => {
     if (
+      !firstname ||
+      !lastname ||
+      !contact ||
+      !address ||
+      !email ||
+      !username ||
+      !password
+    ) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Input fields cannot be empty.',
+      });
+      return;
+    }
+    if (
       !errors.firstname &&
       !errors.lastname &&
       !errors.contact &&
+      !errors.address &&
       !errors.email &&
       !errors.username &&
       !errors.password
@@ -100,6 +125,7 @@ export const SignUp = ({navigation}) => {
           firstname,
           lastname,
           contact,
+          address,
           email,
           username,
           password,
@@ -172,6 +198,7 @@ export const SignUp = ({navigation}) => {
         setFirstname('');
         setLastname('');
         setContact('');
+        setAddress('');
         setEmail('');
         setUsername('');
         setPassword('');
@@ -240,69 +267,89 @@ export const SignUp = ({navigation}) => {
   };*/
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps="handled">
-      <ImageBackground source={bg} resizeMode="cover" style={styles.bg}>
-        <Image source={logo} style={styles.image} resizeMode="contain" />
-        <Text style={styles.title}>Sign Up</Text>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.input}
-            placeholder="FirstName"
-            value={firstname}
-            onChangeText={text =>
-              validateInput(text, 'firstname', setFirstname)
-            }
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-          {errors.firstname && (
-            <Text style={styles.errorText}>{errors.firstname}</Text>
-          )}
-          <TextInput
-            style={styles.input}
-            placeholder="LastName"
-            value={lastname}
-            onChangeText={text => validateInput(text, 'lastname', setLastname)}
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-          {errors.lastname && (
-            <Text style={styles.errorText}>{errors.lastname}</Text>
-          )}
-          <TextInput
-            style={styles.input}
-            placeholder="Contact No."
-            value={contact}
-            onChangeText={text => validateInput(text, 'contact', setContact)}
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-          {errors.contact && (
-            <Text style={styles.errorText}>{errors.contact}</Text>
-          )}
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={text => validateInput(text, 'email', setEmail)}
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-          {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-          <TextInput
-            style={styles.input}
-            placeholder="USERNAME"
-            value={username}
-            onChangeText={text => validateInput(text, 'username', setUsername)}
-            autoCorrect={false}
-            autoCapitalize="none"
-          />
-          {errors.username && (
-            <Text style={styles.errorText}>{errors.username}</Text>
-          )}
-          {/*<TextInput
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        keyboardShouldPersistTaps="handled">
+        <ImageBackground source={bg} resizeMode="cover" style={styles.bg}>
+          <Image source={logo} style={styles.image} resizeMode="contain" />
+          <Text style={styles.title}>Sign Up</Text>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.input}
+              placeholder="FirstName"
+              value={firstname}
+              onChangeText={text =>
+                validateInput(text, 'firstname', setFirstname)
+              }
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            {errors.firstname && (
+              <Text style={styles.errorText}>{errors.firstname}</Text>
+            )}
+            <TextInput
+              style={styles.input}
+              placeholder="LastName"
+              value={lastname}
+              onChangeText={text =>
+                validateInput(text, 'lastname', setLastname)
+              }
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            {errors.lastname && (
+              <Text style={styles.errorText}>{errors.lastname}</Text>
+            )}
+            <TextInput
+              style={styles.input}
+              placeholder="Contact No."
+              value={contact}
+              onChangeText={text => validateInput(text, 'contact', setContact)}
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            {errors.contact && (
+              <Text style={styles.errorText}>{errors.contact}</Text>
+            )}
+            <TextInput
+              style={styles.input}
+              placeholder="Address"
+              value={address}
+              onChangeText={text =>
+                validateInput(text, 'address', setAddress)
+              }
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            {errors.address && (
+              <Text style={styles.errorText}>{errors.address}</Text>
+            )}
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={text => validateInput(text, 'email', setEmail)}
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            {errors.email && (
+              <Text style={styles.errorText}>{errors.email}</Text>
+            )}
+            <TextInput
+              style={styles.input}
+              placeholder="USERNAME"
+              value={username}
+              onChangeText={text =>
+                validateInput(text, 'username', setUsername)
+              }
+              autoCorrect={false}
+              autoCapitalize="none"
+            />
+            {errors.username && (
+              <Text style={styles.errorText}>{errors.username}</Text>
+            )}
+            {/*<TextInput
             style={styles.input}
             placeholder="PASSWORD"
             secureTextEntry
@@ -311,69 +358,78 @@ export const SignUp = ({navigation}) => {
             autoCorrect={false}
             autoCapitalize="none"
           />*/}
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="PASSWORD"
-              secureTextEntry={!showPassword}
-              value={password}
-              onChangeText={setPassword}
-              autoCorrect={false}
-              autoCapitalize="none"
-            />
-            <TouchableOpacity
-              style={styles.eyeIcon}
-              onPress={() => setShowPassword(!showPassword)}>
-              <Icon
-                name={showPassword ? 'visibility' : 'visibility-off'}
-                size={20}
-                color="#fff"
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="PASSWORD"
+                secureTextEntry={!showPassword}
+                value={password}
+                onChangeText={setPassword}
+                autoCorrect={false}
+                autoCapitalize="none"
               />
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.eyeIcon}
+                onPress={() => setShowPassword(!showPassword)}>
+                <Icon
+                  name={showPassword ? 'visibility' : 'visibility-off'}
+                  size={20}
+                  color="#fff"
+                />
+              </TouchableOpacity>
+            </View>
+            {errors.password && (
+              <Text style={styles.errorText}>{errors.password}</Text>
+            )}
           </View>
-          {errors.password && (
-            <Text style={styles.errorText}>{errors.password}</Text>
-          )}
-        </View>
 
-        <View style={styles.buttonView}>
-          <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
-          <Text style={styles.optionsText}>OR Sign Up WITH</Text>
-        </View>
+          <View style={styles.buttonView}>
+            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
+            <Text style={styles.optionsText}>OR Sign Up WITH</Text>
+          </View>
 
-        <View style={styles.mediaIcons}>
-          <Image source={linkedin} style={styles.icons} />
-          <Image source={whatsapp} style={styles.icons} />
-          <Image source={twitter} style={styles.icons} />
-          <Image source={instagram} style={styles.icons} />
-          <Image source={facebook} style={styles.icons} />
-        </View>
+          <View style={styles.mediaIcons}>
+            <Image source={linkedin} style={styles.icons} />
+            <Image source={whatsapp} style={styles.icons} />
+            <Image source={twitter} style={styles.icons} />
+            <Image source={instagram} style={styles.icons} />
+            <Image source={facebook} style={styles.icons} />
+          </View>
 
-        <Text style={styles.footerText}>
-          Do Have Account?
-          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-            <Text style={styles.signIn}>Sign In</Text>
-          </TouchableOpacity>
-        </Text>
-      </ImageBackground>
-    </ScrollView>
+          <Text style={styles.footerText}>
+            Do Have Account?
+            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+              <Text style={styles.signIn}>Sign In</Text>
+            </TouchableOpacity>
+          </Text>
+        </ImageBackground>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  scrollView: {
+    flexGrow: 1,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   bg: {
-    height: screenHeight,
+    padding: 10,
     width: screenWidth,
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
     width: 300,
+    marginTop: 50,
   },
   title: {
     fontSize: 30,
@@ -438,6 +494,7 @@ const styles = StyleSheet.create({
   footerText: {
     textAlign: 'center',
     color: 'gray',
+    marginBottom: 40,
   },
   signIn: {
     marginLeft: 10,

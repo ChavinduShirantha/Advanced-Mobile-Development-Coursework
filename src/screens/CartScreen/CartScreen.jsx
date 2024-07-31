@@ -14,7 +14,7 @@ import Toast from 'react-native-toast-message';
 import RNFS from 'react-native-fs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export const CartScreen = () => {
+export const CartScreen = ({route}) => {
   const {
     cartItems,
     removeFromCart,
@@ -55,6 +55,12 @@ export const CartScreen = () => {
         total: getTotalPrice(),
         currency: '.00 LKR',
         timestamp: new Date().toISOString(),
+        firstname: route.params.firstname,
+        lastname: route.params.lastname,
+        username: route.params.username,
+        email: route.params.email,
+        contact: route.params.contact,
+        address: route.params.address,
       };
 
       const path = RNFS.DocumentDirectoryPath + '/ordersDetails.json';
