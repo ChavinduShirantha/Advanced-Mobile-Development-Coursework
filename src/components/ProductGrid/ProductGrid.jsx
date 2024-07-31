@@ -1,12 +1,17 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import Product from '../Product/Product';
+import {CartContext} from '../../context/CartContext/CartContext';
 
 const products = require('../../assets/products.json');
 
 const ProductGrid = () => {
   const [favourites, setFavourites] = useState(new Set());
-  const [cart, setCart] = useState(new Map());
+  const {addToCart} = useContext(CartContext);
+
+  const handleAddToCart = (product, count) => {
+    addToCart(product, count);
+  };
 
   const handleFavourite = product => {
     setFavourites(prevFavourites => {
@@ -22,14 +27,6 @@ const ProductGrid = () => {
 
   const isFavourite = product => {
     return favourites.has(product.id);
-  };
-
-  const handleAddToCart = (product, count) => {
-    setCart(prevCart => {
-      const newCart = new Map(prevCart);
-      newCart.set(product.id, {...product, count});
-      return newCart;
-    });
   };
 
   return (

@@ -28,6 +28,7 @@ const Product = ({item, onFavourite, isFavourite, onAddToCart}) => {
       onAddToCart(item, newCount);
     } else {
       setIsCartMode(false);
+      setCount(0);
     }
   };
 
