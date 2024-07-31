@@ -11,11 +11,15 @@ import {
   ImageBackground,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
+  Modal,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import RNFS from 'react-native-fs';
 import Toast from 'react-native-toast-message';
+
 const logo = require('../../assets/img/tulip_logo.png');
+const loaderLogo = require('../../assets/img/logo.png');
 const bg = require('../../assets/img/main_bg.jpg');
 
 const linkedin = require('../../assets/img/linkedin.png');
@@ -32,6 +36,7 @@ export const SignIn = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -42,6 +47,8 @@ export const SignIn = ({navigation}) => {
       });
       return;
     }
+
+    setLoading(true);
 
     try {
       const path = RNFS.DocumentDirectoryPath + '/signupData.json';
@@ -133,6 +140,8 @@ export const SignIn = ({navigation}) => {
         text1: 'Error',
         text2: 'Login Unsuccessfully',
       });
+    } finally {
+      setLoading(false); // Hide loader
     }
   };
 
@@ -227,6 +236,24 @@ export const SignIn = ({navigation}) => {
             <Text style={styles.signup}>Sign Up</Text>
           </TouchableOpacity>
         </Text>
+
+        <Modal
+          transparent={true}
+          animationType="none"
+          visible={loading}
+          onRequestClose={() => setLoading(false)}>
+          <View style={styles.modalBackground}>
+            <View style={styles.loaderContainer}>
+              <Image source={loaderLogo} style={styles.loaderImage} />
+              <ActivityIndicator
+                size="large"
+                color="#0af"
+                style={styles.loader}
+              />
+              <Text style={styles.loaderText}>Logging in...</Text>
+            </View>
+          </View>
+        </Modal>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -244,6 +271,12 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 300,
+  },
+  loaderImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    marginBottom: 20,
   },
   title: {
     fontSize: 30,
@@ -344,5 +377,29 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 10,
     top: 15,
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  loaderContainer: {
+    width: 200,
+    height: 220,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    borderRadius: 10,
+    padding: 20,
+  },
+  loaderText: {
+    marginTop: 10,
+    color: '#046d9f',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  loader: {
+    transform: [{scale: 1.5}], // Adjust the scale value as needed
   },
 });
