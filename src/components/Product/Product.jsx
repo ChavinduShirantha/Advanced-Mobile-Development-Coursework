@@ -6,14 +6,25 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useFavourites} from '../../context/FavouriteContext/FavouriteContext';
+import {useNavigation} from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
-const Product = ({item, onFavourite, isFavourite, onAddToCart}) => {
+const Product = ({
+  item,
+  onAddToFavourites,
+  onAddToCart,
+  onRemoveFromFavourites,
+}) => {
   const imageSource = getImageSource(item.image);
   const productStateSource = getProductStateSource(item.productState);
   const [count, setCount] = useState(0);
   const [isCartMode, setIsCartMode] = useState(false);
+  const {favourites} = useFavourites();
+  const navigation = useNavigation();
 
   const handleIncrement = () => {
     const newCount = count + 1;
@@ -32,9 +43,30 @@ const Product = ({item, onFavourite, isFavourite, onAddToCart}) => {
     }
   };
 
+  const isItemFavourite = favourites.some(fav => fav.id === item.id);
+
   const handleAddToCart = () => {
     setIsCartMode(true);
     handleIncrement();
+  };
+
+  const handleToggleFavourite = () => {
+    if (isItemFavourite) {
+      onRemoveFromFavourites(item.id);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Removed from Favourites',
+      });
+    } else {
+      onAddToFavourites(item);
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Added to Favourites',
+      });
+    }
+    navigation.navigate('Favorites');
   };
 
   return (
@@ -49,8 +81,12 @@ const Product = ({item, onFavourite, isFavourite, onAddToCart}) => {
       </Text>
       <TouchableOpacity
         style={styles.favouriteButton}
-        onPress={() => onFavourite(item)}>
-        <Icon name="favorite" size={24} color={isFavourite ? 'red' : 'gray'} />
+        onPress={handleToggleFavourite}>
+        <Icon
+          name="favorite"
+          size={24}
+          color={isItemFavourite ? 'red' : 'gray'}
+        />
       </TouchableOpacity>
       <View style={styles.cartContainer}>
         {!isCartMode ? (

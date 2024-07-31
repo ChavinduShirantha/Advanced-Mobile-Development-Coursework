@@ -2,31 +2,28 @@ import React, {useContext, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import Product from '../Product/Product';
 import {CartContext} from '../../context/CartContext/CartContext';
+import {useFavourites} from '../../context/FavouriteContext/FavouriteContext';
 
 const products = require('../../assets/products.json');
 
 const ProductGrid = () => {
-  const [favourites, setFavourites] = useState(new Set());
+  const {favourites, onAddToFavourites, removeFromFavourites} = useFavourites();
   const {addToCart} = useContext(CartContext);
 
   const handleAddToCart = (product, count) => {
     addToCart(product, count);
   };
 
-  const handleFavourite = product => {
-    setFavourites(prevFavourites => {
-      const newFavourites = new Set(prevFavourites);
-      if (newFavourites.has(product.id)) {
-        newFavourites.delete(product.id);
-      } else {
-        newFavourites.add(product.id);
-      }
-      return newFavourites;
-    });
+  const handleAddToFavourites = product => {
+    onAddToFavourites(product);
+  };
+
+  const handleRemoveFromFavourites = productId => {
+    removeFromFavourites(productId);
   };
 
   const isFavourite = product => {
-    return favourites.has(product.id);
+    return favourites.some(fav => fav.id === product.id);
   };
 
   return (
@@ -35,9 +32,10 @@ const ProductGrid = () => {
       renderItem={({item}) => (
         <Product
           item={item}
-          onFavourite={handleFavourite}
-          isFavourite={isFavourite(item)}
+          onAddToFavourites={handleAddToFavourites}
+          onRemoveFromFavourites={handleRemoveFromFavourites}
           onAddToCart={handleAddToCart}
+          isItemFavourite={isFavourite(item)}
         />
       )}
       keyExtractor={item => item.id}
