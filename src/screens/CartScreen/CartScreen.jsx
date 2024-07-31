@@ -10,6 +10,9 @@ import {
 import React, {useContext, useState} from 'react';
 import {CartContext} from '../../context/CartContext/CartContext';
 import productImagesMappings from '../../assets/productImagesMappings';
+import Toast from 'react-native-toast-message';
+import RNFS from 'react-native-fs';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export const CartScreen = () => {
   const {
@@ -39,10 +42,54 @@ export const CartScreen = () => {
     );
   };
 
-  const handlePurchaseOrder = () => {
+  /*const handlePurchaseOrder = () => {
     Alert.alert('Purchase Order', 'Your order has been placed successfully!', [
       {text: 'OK', onPress: () => clearCart()},
     ]);
+  };*/
+
+  const handlePurchaseOrder = async () => {
+    try {
+      const orderData = {
+        items: [...cartItems.values()],
+        total: getTotalPrice(),
+        currency: '.00 LKR',
+        timestamp: new Date().toISOString(),
+      };
+
+      const path = RNFS.DocumentDirectoryPath + '/ordersDetails.json';
+
+      const fileExists = await RNFS.exists(path);
+
+      if (fileExists) {
+        const existingData = await RNFS.readFile(path);
+        const existingDataParsed = JSON.parse(existingData);
+
+        existingDataParsed.push(orderData);
+
+        await RNFS.writeFile(path, JSON.stringify(existingDataParsed), 'utf8');
+      } else {
+        // Create the file and write the order data
+        await RNFS.writeFile(path, JSON.stringify([orderData]), 'utf8');
+      }
+
+      console.log('Order placed successfully!');
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Order placed successfully!',
+      });
+
+      clearCart();
+    } catch (error) {
+      console.error(error);
+      console.log('Error saving order data');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Error saving order data',
+      });
+    }
   };
 
   const renderItem = ({item}) => (
@@ -83,20 +130,33 @@ export const CartScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={[...cartItems.values()]}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.list}
-      />
-      <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>Total: {getTotalPrice()}.00 LKR</Text>
-      </View>
-      <TouchableOpacity
-        style={styles.purchaseButton}
-        onPress={handlePurchaseOrder}>
-        <Text style={styles.purchaseButtonText}>Purchase Order</Text>
-      </TouchableOpacity>
+      {cartItems.size === 0 ? (
+        <View style={styles.emptyCartContainer}>
+          <Icon name="shopping-cart" size={80} color="#555" />
+          <Text style={styles.emptyCartText}>
+            You Have No Items In Your Shopping Cart.
+          </Text>
+        </View>
+      ) : (
+        <>
+          <FlatList
+            data={[...cartItems.values()]}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+            contentContainerStyle={styles.list}
+          />
+          <View style={styles.totalContainer}>
+            <Text style={styles.totalText}>
+              Total: {getTotalPrice()}.00 LKR
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={styles.purchaseButton}
+            onPress={handlePurchaseOrder}>
+            <Text style={styles.purchaseButtonText}>Purchase Order</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -196,5 +256,18 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  emptyCartContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  emptyCartText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#555',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });

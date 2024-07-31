@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import RNFS from 'react-native-fs';
-import Toast from "react-native-toast-message";
+import Toast from 'react-native-toast-message';
 
 export const ProfileScreen = ({navigation, route}) => {
   const [firstname, setFirstname] = useState(route.params.firstname || '');
